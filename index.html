@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/index.css" />
+  </head>
+  <body class="bg-gray-400">
+    <h1 class="text-center text-3xl font-bold py-10">My ShopCart List</h1>
+
+    <div class="flex item-center justify-center flex-col mx-auto max-w-sm">
+      <label class="text-lg" for="item">Enter a new item</label>
+      <input
+        type="text"
+        name="item"
+        id="item"
+        class="block w-full mt-2 bg-white placeholder:text-gray-200 text-sm px-4 py-3.5 rounded-xl shadow-sm border border-transparent focus:border-black focus:outline-none"
+      />
+      <button class="bg-blue-500 text-white py-3 rounded-xl mt-4">
+        Add Item
+      </button>
+    </div>
+
+    <ul class="mx-auto max-w-sm pt-6"></ul>
+
+    <div class="text-center text-[12px] py-5" id="listCount">
+        <h5>You have <span id="count">0</span> items in your list</h5>
+    </div>
+
+    <script>
+  
+      
+      const list = document.querySelector('ul');
+      const input = document.querySelector('input');
+      const button = document.querySelector('button');
+      const count = document.getElementById("count");
+
+        function commonAction(){
+        const myItem = input.value;
+        input.value = '';
+
+        const listItem = document.createElement('li');
+        const listText = document.createElement('span');
+        const listBtn = document.createElement('button');
+        const editBtn = document.createElement('button');
+
+        listItem.appendChild(listText);
+        listText.textContent = myItem;
+        listItem.appendChild(listBtn);
+        listBtn.textContent = 'Delete';
+        listBtn.className = 'normal';
+        listItem.appendChild(editBtn);
+        editBtn.className = 'edit'
+        editBtn.textContent = 'Edit'
+        list.appendChild(listItem);
+        
+
+        listBtn.addEventListener('click', () => {
+          const confirmation = confirm("Press okay to confirm");
+          if(confirmation === true){
+            list.removeChild(listItem);
+           
+          }
+          else{
+            return;
+            
+          }
+
+          counter --;
+          count.textContent = counter;
+          console.log(listItem)
+        });
+
+        editBtn.addEventListener('click', ()=>{
+
+            if(editBtn.innerText.toLowerCase() == "edit"){
+                listText.contentEditable = true;
+                editBtn.innerText = 'Save'
+                listText.className = "outline"
+                
+            }
+            else if(editBtn.innerText.toLowerCase() == 'save'){
+                listText.contentEditable = false
+                editBtn.innerText = 'Edit';
+                
+            }
+        })
+
+        input.focus();
+  
+        }
+
+
+    //   button.addEventListener('click', () => {
+        
+    //     saveData()
+    //   });
+    
+      let counter = 0;
+      button.addEventListener("click", () =>{
+        commonAction();
+            counter ++;
+            count.textContent = counter ;
+            
+        }
+
+      )
+
+        input.addEventListener('keydown', (event)=>{
+            const key = event.key;
+            if (key === 'Enter'){
+                commonAction();
+            counter ++;
+            count.textContent = counter
+            }
+            
+ }
+    )
+
+
+    function saveData(){
+        localStorage.setItem("data", list.innerHTML)
+    }
+
+    function showData(){
+        list.innerHTML = localStorage.getItem("data");
+    }
+
+    
+
+    showData()
+    
+    
+    </script>
+  </body>
+</html>
